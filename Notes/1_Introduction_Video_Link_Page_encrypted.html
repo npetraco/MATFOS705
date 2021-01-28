@@ -173,7 +173,7 @@
         e.preventDefault();
 
         var passphrase = document.getElementById('staticrypt-password').value,
-            encryptedMsg = '9145842587a200714c2219be28d55bd0280c0bb021d15e3000f3b51473bc7e427ebbfbe02c70e3709d60b08c669363a2b8dffd7d04a6c0b6ce0620370e385cc6WxNcXCC3liS5dGqJgQHO1rpecVkSmPX2wYlsDMkHWP5l7kj57qnIHYoWi2zBMlJugL+6ISGFuo+Mv36PhZBW9NwBNIe42Z5Zz09vjA9iMaoaOHwI1GCWPt0i0S66+4d+QuA6E5S6gk5XjB2gKgSyyWkj1VR2WIUMRwswGxSL7IGxBhupYfNTZny6U767gVCG6jL535M4AHonfYDorDR5JVtpWwv8ASSzkb9r9oHHH+PRhqR6vCKnRosQknLy0HPG+wY8ZBBOp74YGn+5QTbUZRU3bxHqhytYIutK5Q8PEl5F3Xwrfc72JvaJM+6zLncbxczwz0G5caBfhrCw/Y0Vcoq7a3uTozYtwtsdfbCxgo4vLQipEoXE1FmOtsrrC+EXy5GxmFscYw17XDDyMPKOe0tx9BDSPB7mtQQ5uhBIAQlao45WdIhXeGmUBEp5gY71d6ZUz33Enqk8YH9WLgbLTQE+4tg2UG6jnFNb1JIC49sv7wGkXsQDUIXUFDSydzp4tzRauoD4ggyK3qZmobpl9MEscFWYgawD2AC4gGUAqQY=',
+            encryptedMsg = '9dec61dded40f8c714495365a38ac00424f37ace15eb2e2b7b6a4d807958e1cb08670650eeaa1f0a5b1dd2f34d28f37c3ea3e047bf51f0855940ca358e005c35Hu0LuMQQ1HS7e8zfIXkJru/2uH+QuEyWBOIFqjQdGTOWWj92VijlfccwFExe4AFjjzb0I8BdKy3muxJ2M7dYuVGZzGNbysl9GFAFJOIW4PrG2vYoCReXUwd9m1LzmaqwiWhvGMtlwMzAWMHkBa0RMRkCcZrQwzZqmmkeoZHcRZdifmAqkONTI8Uj7FMKZMkOhIMuh+prL4OJ9iKYz1GwiCd66jV6dOCw+8M6R2wU6oe710Qwvvk+xbJSL95yUitWTFxsXqAbKT6J0fwA5quHrSD5k5mI1EJxWRGHbNkZ4ogIZT4OEg9CJSlkPQ0fNTClJtNkiWoY1NXcpuJSGBSOGOkZXrs12mGVf6Xm8RT62lipWj2wgpJ3Ei+QEdaGl+GBUqY9Pvd+zZ1cNXai4YDogm1kQ0WROqyTflUYsoN4ScS1b1OIjZ2GF+Z2S2yc2O05lcPyPgI/0hXvzebXWcCBP6bZ+F0pFA8mw2JkqATD9LGeosBJ6H12VHHQizdLHV15AzyxwT0jisATBhAuLFTRTM9O083E3PzmyP6Z6RbW18M=',
             encryptedHMAC = encryptedMsg.substring(0, 64),
             encryptedHTML = encryptedMsg.substring(64),
             decryptedHMAC = CryptoJS.HmacSHA256(encryptedHTML, CryptoJS.SHA256(passphrase).toString()).toString();
