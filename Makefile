@@ -2,7 +2,6 @@
 
 default:
 	cp FOS705.html index.html
-	./evp.sh
 	git add --all
 	git commit -m "update"
 	git push -u origin master
