@@ -1,5 +1,9 @@
+#library(coda)        # Handy utility functions like HPDIs
+#library(rstan)
 library(bayesutils)  # Can replace above with just this
 
+# JAGS model:
+#working.dir <- setwd("YOUR_PATH_TO_A_STAN_FILE")
 jm <- "
 model{
 

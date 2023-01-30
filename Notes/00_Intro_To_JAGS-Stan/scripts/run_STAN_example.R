@@ -1,10 +1,27 @@
-library(coda)        # Handy utility functions like HPDIs
-library(rstan)
+#library(coda)        # Handy utility functions like HPDIs
+#library(rstan)
 library(bayesutils)  # Can replace above with just this
 
 # Load a Stan model:
-working.dir <- setwd("YOUR_PATH_TO_A_STAN_FILE")
-stan.code   <- paste(readLines("binomial_beta.stan"),collapse='\n')
+#working.dir <- setwd("YOUR_PATH_TO_A_STAN_FILE")
+#stan.code   <- paste(readLines("binomial_beta.stan"),collapse='\n')
+stan.code    <-"
+data {
+  int<lower=0> n;
+  int<lower=0> s;
+  real<lower=0> a;
+  real<lower=0> b;
+}
+parameters {
+  real<lower=0,upper=1> p_heads;
+}
+model {
+  // proir on p_heads:
+  p_heads ~ beta(a, b);
+
+  // likelihood:
+  s ~ binomial(n, p_heads);
+}"
 
 # Translate Stan code into C++
 model.c <- stanc(model_code = stan.code, model_name = 'model')
