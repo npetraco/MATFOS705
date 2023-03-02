@@ -1,11 +1,22 @@
-#library(coda)        # Handy utility functions like HPDIs
 #library(rstan)
-library(bayesutils)  # Can replace above with just this
+#library(devtools)
+#install_github("https://github.com/npetraco/bayesutils")
+library(bayesutils) # Can replace above with just bayesutils
+
+# Extra options to set for Stan:
+options(mc.cores = 1)
+rstan_options(auto_write = TRUE)
 
 # Load a Stan model:
-#working.dir <- setwd("YOUR_PATH_TO_A_STAN_FILE")
+# Option 1. Load by path to stan file:
+#setwd("<path_to_Stan-file>")
 #stan.code   <- paste(readLines("binomial_beta.stan"),collapse='\n')
-stan.code    <-"
+#
+# Option 2. Load a built in stan model from bayesutils library:
+#stan.code <- paste(readLines(system.file("stan/binomial_beta.stan", package = "bayesutils")), collapse='\n')
+#
+# Option 3. Load in a stan model as just text from here:
+stan.code <- "
 data {
   int<lower=0> n;
   int<lower=0> s;
@@ -24,38 +35,30 @@ model {
 }"
 
 # Translate Stan code into C++
-model.c <- stanc(model_code = stan.code, model_name = 'model')
+model.c <- stanc(model_code = stan.code)
 
 # Compile the Stan C++ model:
 sm <- stan_model(stanc_ret = model.c, verbose = T)
 
-# Data: Experimental sample
-s <- 16
-n <- 20
+# Data:
 dat <- list(
-  "n" = n,
-  "s" = s,
-  "a" = 1,
-  "b" = 1
+  # Prior hyper-parameters
+  a = 1,
+  b = 1,
+  # The data:
+  n = 10,     # Number of flips
+  s = 4       # Number of heads
 )
 
 #Run the model:
 fit <- sampling(sm, data = dat, iter=5000, thin = 1, chains = 4)
-fit
-
-# Examine chains trace and autocorrelation:
 params.chains <- extract.params(fit, by.chainQ = T)
-mcmc_trace(params.chains, pars =c("p_heads"))
-autocorrelation.plots(params.chains, pars = c("p_heads"))
+mcmc_trace(params.chains, pars = c("p_heads"))
+plot(fit)
+pairs(fit)
 
 # Examine posteriors:
 params.mat <- extract.params(fit, as.matrixQ = T)
-mcmc_areas(params.mat, pars =c("p_heads"), prob = 0.95)
+ppi        <- params.mat$p_heads
+hist(ppi)
 
-mean(params.mat$p_heads)
-median(params.mat$p_heads)
-sd(params.mat$p_heads)
-
-hist(params.mat$p_heads, xlab="p_heads | s")
-
-parameter.intervals(params.mat$p_heads, plotQ = T, prob = 0.80)
