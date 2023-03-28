@@ -1,7 +1,4 @@
-library(rjags)
-library(R2jags)
-
-setwd("/Users/karen2/Desktop/")
+library(bayesutils)
 
 dat <- list(
   n     = 10,  # Data
@@ -16,16 +13,21 @@ inits <- function (){
 
 fit <- jags(data=dat, 
             inits=inits, 
-            parameters.to.save = c("theta","p"), 
+            parameters.to.save = c("ppi"), 
             n.iter=20000, n.burnin = 500, n.thin = 10,
             n.chains=4, 
-            model.file="binomial-logitnormal.bug.R")
+            model.file=system.file("jags/binomial_logitnormal.bug.R", package = "bayesutils"))
 fit
-traceplot(fit)
+
+# Examine chains trace and autocorrelation:
+params.chains <- extract.params(fit, by.chainQ = T)
+mcmc_trace(params.chains, pars =c("ppi"))
+autocorrelation.plots(params.chains, pars = c("ppi"))
+
 
 # Examine posterior
-ppi <- fit$BUGSoutput$sims.matrix[,"p"]
-hist(ppi, xlim=c(0,1))
+params.mat <- extract.params(fit, as.matrixQ = T)
+mcmc_areas(params.mat, pars =c("ppi"), prob = 0.95)
 
-theta <- fit$BUGSoutput$sims.matrix[,"theta"]
-hist(theta)
+ppi <- params.mat$ppi
+parameter.intervals(ppi, plotQ = T)
