@@ -5,11 +5,11 @@ options(mc.cores = 1)
 rstan_options(auto_write = TRUE)
 
 # Load a Stan model:
-working.dir <- setwd("<path_to_stan_file>")
-stan.code   <- paste(readLines(system.file("stan/binomial_logitnormal.stan", package = "bayesutils")),collapse='\n')
+#working.dir <- setwd("<path_to_stan_file>")
+stan.code   <- read.mf("binomial_logitnormal.stan")
 
 # Translate Stan code into C++
-model.c <- stanc(model_code = stan.code, model_name = 'model', verbose = T)
+model.c <- stanc(model_code = stan.code, model_name = 'model', verbose=T)
 
 # Compile the Stan C++ model:
 sm <- stan_model(stanc_ret = model.c, verbose = T)
@@ -34,6 +34,7 @@ plot(fit)
 params.chains <- extract.params(fit, by.chainQ = T)
 mcmc_trace(params.chains, pars =c("ppi"))
 autocorrelation.plots(params.chains, pars = c("ppi"))
+
 
 # Examine posterior
 params.mat <- extract.params(fit, as.matrixQ = T)
