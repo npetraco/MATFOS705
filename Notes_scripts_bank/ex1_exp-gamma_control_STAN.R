@@ -1,6 +1,4 @@
 library(bayesutils)
-library(coda)      # Handy utility functions like HPDIs
-library(rstan)
 
 # Extra options to set for Stan:
 options(mc.cores = 1)
