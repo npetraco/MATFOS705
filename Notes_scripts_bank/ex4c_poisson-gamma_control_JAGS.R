@@ -1,8 +1,4 @@
-library(bayes705)
-library(rjags)
-library(R2jags)
-library(coda)
-library(bayesplot)
+library(bayesutils)
 
 M <- c(1154, 1062, 1203, 1125, 1091, 1120, 1202, 1129, 1103, 1098, 1169, 1142, 1174, 1111, 1148,
        1134, 1146, 1179, 1165, 1076, 1152, 1209, 1205, 1139, 1227, 1145, 1140, 1220, 1059, 1165)
@@ -31,14 +27,17 @@ fit <- jags(data=dat,
             #n.iter=10,
             n.iter=20000, n.burnin = 500, n.thin = 10,
             n.chains=4,
-            model.file = system.file("jags/poisson-gamma_multiple.bug.R", package = "bayes705"))
+            model.file = system.file("jags/poisson-gamma_multiple.bug.R", package = "bayesutils"))
 fit
-coda::traceplot(as.mcmc(fit))
 
-# Examine posterior
-colnames(fit$BUGSoutput$sims.matrix)
-lambda <- fit$BUGSoutput$sims.matrix[,2:31] # JAGS
-mcmc_areas(lambda, prob = 0.95)
+# Examine chains trace and autocorrelation:
+# params.chains <- extract.params(fit, by.chainQ = T)
+# mcmc_trace(params.chains, pars =c("lambda"))
+# autocorrelation.plots(params.chains, pars = c("lambda"))
+
+# Examine posteriors:
+params.mat <- extract.params(fit, as.matrixQ = T)
+mcmc_areas(params.mat, regex_pars =c("lambda"), prob = 0.95)
 
 # Posterior Density Intervals
 colnames(params.mat)
